@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مُعلِّم AI | تحويل الكتب إلى دورات</title>
+<style>
+:root{--ink:#17233b;--muted:#69758b;--line:#e4e9f2;--bg:#f5f7fb;--card:#fff;--accent:#3157d5;--accent2:#1f9b83;--soft:#eef2ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.8}
+header{background:linear-gradient(120deg,#182b55,#3157d5);color:white;padding:28px 18px 56px}
+.wrap{max-width:1080px;margin:auto;padding:0 18px}.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:1.2rem}.logo{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#ffffff24;font-size:1.5rem}
+h1{font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.35;margin:28px 0 8px}.lead{max-width:720px;color:#e5eaff;margin:0}
+main{margin-top:-30px;padding-bottom:50px}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 10px 32px #1b2b4b0b}
+h2{margin:0 0 12px;font-size:1.25rem}.muted{color:var(--muted);font-size:.94rem}.drop{border:2px dashed #bac7e5;border-radius:16px;padding:26px 18px;text-align:center;background:#fafbff;margin:18px 0}.drop strong{display:block;font-size:1.05rem}.drop input{max-width:100%;margin-top:15px}
+button{border:0;border-radius:12px;padding:12px 18px;background:var(--accent);color:white;font-weight:700;cursor:pointer;font:inherit}button:disabled{opacity:.5;cursor:wait}.secondary{background:#edf1ff;color:#2847b4}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.status{margin-top:14px;padding:12px 14px;background:#f1f5f9;border-radius:12px;color:#40516b;white-space:pre-wrap;word-break:break-word}.status.ok{background:#e8f8f2;color:#17684f}.status.err{background:#fff0f0;color:#a12d2d}.steps{display:grid;gap:12px}.step{display:flex;gap:12px;align-items:flex-start}.num{flex:0 0 32px;height:32px;border-radius:10px;background:var(--soft);color:var(--accent);font-weight:bold;display:grid;place-items:center}.step b{display:block}.pill{display:inline-block;padding:3px 10px;border-radius:30px;background:#e8f8f2;color:#17684f;font-size:.8rem;font-weight:700}.results{margin-top:18px;display:none}.result-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.page-list{max-height:380px;overflow:auto;display:grid;gap:10px;margin-top:15px}.page{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.page summary{cursor:pointer;font-weight:700}.page p{white-space:pre-wrap;margin-bottom:0}.warning{border-right:4px solid #e1a23b;padding:10px 14px;background:#fff8e8;border-radius:8px;color:#78531c;margin-top:14px;font-size:.9rem}
+footer{text-align:center;color:var(--muted);padding:24px;font-size:.85rem}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.card{padding:18px}header{padding-bottom:48px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><div class="logo">م</div><span>مُعلِّم AI <small style="font-weight:400;opacity:.8">| محرك التأليف التعليمي</small></span></div>
+  <h1>حوّل كتابك إلى تجربة تعلّم منظمة</h1>
+  <p class="lead">ابدأ برفع كتاب PDF. تفحص هذه النسخة النص المستخرج وتُظهر الصفحات التي قد تحتاج إلى OCR. هذه نواة أولية قابلة للتطوير إلى منصة تأليف دورات تعليمية.</p>
+</div></header>
+<main class="wrap">
+<div class="grid">
+<section class="card">
+  <h2>١. ارفع كتاب PDF</h2>
+  <p class="muted">تعمل هذه الواجهة مع خادم محلي عند تشغيل الـ API. الحد الأولي لحجم الملف 40 ميغابايت.</p>
+  <div class="drop">
+    <strong>اختر كتابًا من جهازك</strong>
+    <span class="muted">يدعم PDF النصي. الصفحات الممسوحة ضوئيًا قد تتطلب OCR.</span><br>
+    <input id="pdf" type="file" accept="application/pdf,.pdf">
+  </div>
+  <div class="row"><button id="extract">تحليل الكتاب</button><button id="generate" class="secondary" disabled>إنشاء درس بالذكاء الاصطناعي</button></div>
+  <div id="status" class="status" role="status">لم يتم اختيار ملف بعد.</div>
+  <div class="warning">تنبيه: لا ترفع كتابًا لا تملك حق استخدامه. لا تُعد نتائج الاستخراج أو المحتوى المولد مراجعة علمية نهائية.</div>
+</section>
+<section class="card">
+  <h2>كيف ستعمل المنصة؟</h2>
+  <div class="steps">
+    <div class="step"><span class="num">١</span><div><b>استخراج النص</b><span class="muted">قراءة الصفحات وربط المحتوى بأرقامها.</span></div></div>
+    <div class="step"><span class="num">٢</span><div><b>بناء خريطة الكتاب</b><span class="muted">الفصول والعناوين والمفاهيم والأهداف.</span></div></div>
+    <div class="step"><span class="num">٣</span><div><b>تأليف الدروس</b><span class="muted">شرح وافٍ وأمثلة وتدريبات غير مكررة.</span></div></div>
+    <div class="step"><span class="num">٤</span><div><b>مراجعة الجودة</b><span class="muted">فحص التغطية والإحالات والتناقضات.</span></div></div>
+    <div class="step"><span class="num">٥</span><div><b>نشر الدورة</b><span class="muted">دروس تفاعلية وتقدم واختبارات.</span></div></div>
+  </div>
+</section>
+</div>
+<section id="results" class="card results">
+  <div class="result-head"><div><h2 style="margin-bottom:0">نتيجة تحليل الكتاب</h2><div id="summary" class="muted"></div></div><span class="pill">مرحلة الاستخراج</span></div>
+  <div id="scanWarning"></div>
+  <div id="pages" class="page-list"></div>
+  <div id="genArea" style="margin-top:20px;display:none"><h2>مسودة الدرس</h2><div id="genStatus" class="status"></div><div id="lessonOutput"></div></div>
+</section>
+</main>
+<footer>مُعلِّم AI — نسخة أولية 0.1 · تُحفظ الملفات على الخادم أثناء المعالجة فقط في هذا النموذج.</footer>
+<script>
+const API = "http://127.0.0.1:8000";
+const fileInput = document.getElementById("pdf");
+const statusBox = document.getElementById("status");
+const results = document.getElementById("results");
+let extractedPages = [];
+function status(text, kind=""){statusBox.textContent=text;statusBox.className="status "+kind}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+document.getElementById("extract").addEventListener("click", async()=>{
+ const f=fileInput.files[0];
+ if(!f){status("اختر ملف PDF أولًا.","err");return}
+ if(!f.name.toLowerCase().endsWith(".pdf")){status("الملف المحدد ليس PDF.","err");return}
+ const btn=document.getElementById("extract");btn.disabled=true;status("جارٍ رفع الملف واستخراج النص…");
+ try{
+  const fd=new FormData();fd.append("file",f);
+  const r=await fetch(API+"/api/extract",{method:"POST",body:fd});
+  const data=await r.json();
+  if(!r.ok)throw new Error(data.detail||"حدث خطأ أثناء المعالجة.");
+  status("اكتمل استخراج النص.","ok");
+  extractedPages = data.pages.filter(p=>p.text.trim()).slice(0, 12);
+  document.getElementById("generate").disabled = extractedPages.length === 0;
+  document.getElementById("summary").textContent=`${data.filename} · ${data.page_count} صفحة · ${data.text_chars.toLocaleString("ar")} حرف مستخرج`;
+  document.getElementById("scanWarning").innerHTML=data.scanned_or_empty_pages.length
+   ? `<div class="warning">الصفحات التالية فارغة نصيًا أو قد تكون ممسوحة ضوئيًا: ${data.scanned_or_empty_pages.slice(0,80).join("، ")}${data.scanned_or_empty_pages.length>80?"…":""}. تحتاج إلى OCR أو فحص بصري.</div>`
+   : `<div class="status ok">لم تُكتشف صفحات قليلة النص وفق الفحص الأولي؛ يُنصح بمراجعة عينة للتأكد من جودة الاستخراج.</div>`;
+  document.getElementById("pages").innerHTML=data.pages.map(p=>`<details class="page"><summary>الصفحة ${p.page} · ${p.text.length.toLocaleString("ar")} حرف</summary><p>${esc(p.text||"لا يوجد نص مستخرج من هذه الصفحة.")}</p></details>`).join("");
+  results.style.display="block";results.scrollIntoView({behavior:"smooth",block:"start"});
+ }catch(e){status(`تعذر الاتصال بالخادم: ${e.message}\nتأكد من تشغيل FastAPI على ${API}.`,"err")}
+ finally{btn.disabled=false}
+});
+document.getElementById("generate").addEventListener("click", async()=>{
+ if(!extractedPages.length){status("حلل ملف PDF أولًا.","err");return}
+ const btn=document.getElementById("generate");
+ btn.disabled=true;
+ const ga=document.getElementById("genArea");ga.style.display="block";
+ document.getElementById("genStatus").textContent="جارٍ إنشاء مسودة من أول 12 صفحة نصية. قد تستغرق العملية بعض الوقت وتستهلك رصيد API.";
+ document.getElementById("lessonOutput").innerHTML="";
+ try{
+  const r=await fetch(API+"/api/generate-lesson",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+   title:"درس مستخرج من الكتاب",
+   pages:extractedPages,
+   desired_exercises:8
+  })});
+  const data=await r.json();
+  if(!r.ok)throw new Error(data.detail||"فشل توليد الدرس.");
+  document.getElementById("genStatus").textContent=`مسودة من ${data.provider||"مزود AI"} — الحالة: ${data.review_status||"تحتاج إلى مراجعة بشرية"}. لا تُنشر تلقائيًا.`;
+  const sections=(data.lesson_sections||[]).map(s=>`<article class="page"><h3>${esc(s.heading||"شرح")}</h3><p>${esc(s.explanation||"")}</p><small class="muted">صفحات المصدر: ${esc((s.source_pages||[]).join("، "))}</small></article>`).join("");
+  const concepts=(data.key_concepts||[]).map(c=>`<article class="page"><b>${esc(c.concept||"مفهوم")}</b><p>${esc(c.explanation||"")}</p></article>`).join("");
+  const exercises=(data.exercises||[]).map((q,i)=>`<details class="page"><summary>التدريب ${i+1}: ${esc(q.question||"")}</summary><p><b>الإجابة:</b> ${esc(q.answer||"")}</p><p><b>التفسير:</b> ${esc(q.explanation||"")}</p></details>`).join("");
+  document.getElementById("lessonOutput").innerHTML=`<h3>${esc(data.title||"الدرس")}</h3><h4>الأهداف التعليمية</h4><ul>${(data.learning_objectives||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ul><h4>المفاهيم الأساسية</h4>${concepts}<h4>الشرح</h4>${sections}<h4>التدريبات</h4>${exercises}<div class="warning">هذه مسودة مولدة آليًا؛ راجعها علميًا وقارنها بالمصدر قبل اعتمادها.</div>`;
+ }catch(e){document.getElementById("genStatus").textContent=`تعذر إنشاء الدرس: ${e.message}`}
+ finally{btn.disabled=false}
+});
+</script>
+</body>
+</html>
